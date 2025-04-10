@@ -57,7 +57,7 @@ void exibirLivro(const Livro *livro) {
     printf("Status: %s\n\n", livro->status == DISPONIVEL ? "Disponível" : "Emprestado");
 }
 
-// Função bônus: buscar livro por título (ignorando maiúsculas/minúsculas)
+// Buscar livro por título
 void buscarLivroPorTitulo(Livro *livros, int quantidade, const char *tituloBusca) {
     int encontrado = 0;
     for (int i = 0; i < quantidade; i++) {

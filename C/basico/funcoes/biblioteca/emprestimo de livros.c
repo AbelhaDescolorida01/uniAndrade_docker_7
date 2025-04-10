@@ -1,0 +1,139 @@
+#ifndef BIBLIOTECA_H
+#define BIBLIOTECA_H
+
+#define MAX_TITULO 100
+#define MAX_AUTOR 100
+#define MAX_LIVROS 10
+#define MAX_EMPRESTIMOS 3
+
+typedef enum {
+    DISPONIVEL,
+    EMPRESTADO
+} StatusLivro;
+
+typedef struct {
+    char titulo[MAX_TITULO];
+    char autor[MAX_AUTOR];
+    int total_emprestimos;
+    StatusLivro status;
+} Livro;
+
+void emprestarLivro(Livro *livro);
+void devolverLivro(Livro *livro);
+void exibirLivro(const Livro *livro);
+void buscarLivroPorTitulo(Livro *livros, int quantidade, const char *tituloBusca);
+void menu(Livro *livros, int quantidade);
+
+#endif
+
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+void emprestarLivro(Livro *livro) {
+    if (livro->status == DISPONIVEL && livro->total_emprestimos < MAX_EMPRESTIMOS) {
+        livro->status = EMPRESTADO;
+        livro->total_emprestimos++;
+        printf("Livro emprestado com sucesso!\n");
+    } else {
+        printf("Livro não disponível para empréstimo.\n");
+    }
+}
+
+void devolverLivro(Livro *livro) {
+    if (livro->status == EMPRESTADO) {
+        livro->status = DISPONIVEL;
+        printf("Livro devolvido com sucesso!\n");
+    } else {
+        printf("Este livro já está disponível.\n");
+    }
+}
+
+void exibirLivro(const Livro *livro) {
+    printf("Título: %s\n", livro->titulo);
+    printf("Autor: %s\n", livro->autor);
+    printf("Total de Empréstimos: %d\n", livro->total_emprestimos);
+    printf("Status: %s\n\n", livro->status == DISPONIVEL ? "Disponível" : "Emprestado");
+}
+
+// Buscar livro por título
+void buscarLivroPorTitulo(Livro *livros, int quantidade, const char *tituloBusca) {
+    int encontrado = 0;
+    for (int i = 0; i < quantidade; i++) {
+        if (strcasestr(livros[i].titulo, tituloBusca)) {
+            printf("Livro encontrado (ID %d):\n", i);
+            exibirLivro(&livros[i]);
+            encontrado = 1;
+        }
+    }
+    if (!encontrado) {
+        printf("Nenhum livro encontrado com o título: %s\n", tituloBusca);
+    }
+}
+
+void menu(Livro *livros, int quantidade) {
+    int opcao, id;
+    char buffer[200];
+
+    do {
+        printf("\n=== MENU ===\n");
+        printf("1. Ver livros\n");
+        printf("2. Emprestar livro\n");
+        printf("3. Devolver livro\n");
+        printf("4. Buscar livro por título\n");
+        printf("0. Sair\n");
+        printf("Escolha uma opção: ");
+        fgets(buffer, sizeof(buffer), stdin);
+        sscanf(buffer, "%d", &opcao);
+
+        switch(opcao) {
+            case 1:
+                for (int i = 0; i < quantidade; i++) {
+                    printf("Livro %d:\n", i);
+                    exibirLivro(&livros[i]);
+                }
+                break;
+            case 2:
+                printf("ID do livro para emprestar: ");
+                fgets(buffer, sizeof(buffer), stdin);
+                sscanf(buffer, "%d", &id);
+                if (id >= 0 && id < quantidade)
+                    emprestarLivro(&livros[id]);
+                else
+                    printf("ID inválido.\n");
+                break;
+            case 3:
+                printf("ID do livro para devolver: ");
+                fgets(buffer, sizeof(buffer), stdin);
+                sscanf(buffer, "%d", &id);
+                if (id >= 0 && id < quantidade)
+                    devolverLivro(&livros[id]);
+                else
+                    printf("ID inválido.\n");
+                break;
+            case 4:
+                printf("Digite o título ou parte do título: ");
+                fgets(buffer, sizeof(buffer), stdin);
+                buffer[strcspn(buffer, "\n")] = '\0'; // remove newline
+                buscarLivroPorTitulo(livros, quantidade, buffer);
+                break;
+            case 0:
+                printf("Saindo...\n");
+                break;
+            default:
+                printf("Opção inválida.\n");
+        }
+    } while (opcao != 0);
+}
+
+int main() {
+    Livro livros[MAX_LIVROS] = {
+        {"1984", "George Orwell", 0, DISPONIVEL},
+        {"Dom Casmurro", "Machado de Assis", 0, DISPONIVEL},
+        {"O Pequeno Príncipe", "Antoine de Saint-Exupéry", 0, DISPONIVEL}
+    };
+
+    menu(livros, 3);
+    return 0;
+}
