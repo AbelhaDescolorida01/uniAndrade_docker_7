@@ -1,4 +1,4 @@
-from .inimigo import Inimigo
+from inimigo import Inimigo
 
 class cacador(Inimigo):
     def __init__(self, nome, dano, agilidade):

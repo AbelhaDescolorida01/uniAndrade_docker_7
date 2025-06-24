@@ -1,3 +1,6 @@
+from Python.darksouls.jogadores.jogador import Jogador
+
+
 class Ladino(Jogador):
     def __init__(self, nome: str, dano: int, agilidade: int):
         super().__init__(nome, dano)

@@ -1,3 +1,6 @@
+from Python.darksouls.jogadores.jogador import Jogador
+
+
 class Cavaleiro(Jogador):
     def __init__(self, nome: str, dano: int, armadura: int):
         super().__init__(nome, dano)

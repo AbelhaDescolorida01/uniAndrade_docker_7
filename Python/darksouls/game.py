@@ -1,7 +1,6 @@
 from jogadores.cavaleiro import Cavaleiro
 from itens.arma import Arma
 from itens.pocao import Pocao
-from inimigos.chefe import Chefe
 from inimigos.mago import MagoSombrio
 from inimigos.cacador import CacadorCorrompido
 from npcs.ferreiro import Ferreiro
@@ -13,10 +12,8 @@ def main():
     espada = Arma("Espada Longa", 15, 10)
     pocao = Pocao("Poção de Cura", 25)
 
-    inimigo1 = Chefe("Senhor das Cinzas", 25)
-    inimigo2 = MortoVivo("Zumbi", 10, podridao=8, velocidade=3)
-    inimigo3 = MagoSombrio("Feiticeiro das Sombras", 20, mana=30)
-    inimigo4 = CacadorCorrompido("Caçador Corrompido", 18, agilidade=7)
+    inimigo1 = MagoSombrio("Feiticeiro das Sombras", 20, mana=30)
+    inimigo2 = CacadorCorrompido("Caçador Corrompido", 18, agilidade=7)
 
     ferreiro = Ferreiro("Posso forjar algo para você?", amizade=5, inventario=[], metal="Aço")
 
@@ -38,12 +35,6 @@ def main():
             elif inimigo == "2":
                 inimigo2.morder()
                 jogador.defender(inimigo2.dano)
-            elif inimigo == "3":
-                inimigo3.atacar()
-                jogador.defender(inimigo3.dano)
-            elif inimigo == "4":
-                inimigo4.atacar()
-                jogador.defender(inimigo4.dano)
             else:
                 print("Inimigo inválido.")
 
